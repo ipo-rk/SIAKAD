@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login SIAKAD - SMP YPPGI Bomou</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/login.css">
+
+    <!-- ANIMASI MODERN -->
+    <style>
+        .login-card {
+            animation: fadeSlide 0.8s ease forwards;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .role-option {
+            transition: all 0.3s ease;
+        }
+
+        .role-option:hover {
+            transform: translateY(-4px);
+        }
+
+        .role-option input:checked+.role-label {
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-login {
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .animate-form {
+            animation: scaleFade 0.4s ease;
+        }
+
+        @keyframes scaleFade {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="row">
+
+                <!-- LEFT -->
+                <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center"
+                    style="border-right:1px solid #f0f0f0;">
+                    <div class="text-center px-3">
+                        <img src="assets/img/logo.jpeg" alt="logo" class="img-fluid d-block mx-auto mb-3"
+                            style="max-width:160px;">
+                        <h2 class="fw-bold">SIAKAD</h2>
+                        <p class="text-muted">SMP YPPGI Bomou<br>Kab. Deiyai</p>
+                        <p class="small text-muted mt-3">
+                            Sistem Informasi Akademik untuk manajemen siswa, nilai, absensi, dan raport.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="col-12 col-md-6">
+                    <div id="errorMessage" class="error-message"></div>
+
+                    <div class="d-flex justify-content-end mb-3">
+                        <button id="showLoginBtn" class="btn btn-sm btn-outline-primary me-2">Login</button>
+                        <button id="showRegisterBtn" class="btn btn-sm btn-primary">Daftar</button>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <label class="fw-semibold mb-2 d-block">Pilih Role:</label>
+
+                        <div class="role-selector mb-3">
+                            <div class="role-option">
+                                <input type="radio" id="roleAdmin" name="role" value="admin" checked>
+                                <label for="roleAdmin" class="role-label">
+                                    <i class="fa fa-shield-halved"></i><span>Admin</span>
+                                </label>
+                            </div>
+
+                            <div class="role-option">
+                                <input type="radio" id="roleGuru" name="role" value="guru">
+                                <label for="roleGuru" class="role-label">
+                                    <i class="fa fa-chalkboard-teacher"></i><span>Guru</span>
+                                </label>
+                            </div>
+
+                            <div class="role-option">
+                                <input type="radio" id="roleSiswa" name="role" value="siswa">
+                                <label for="roleSiswa" class="role-label">
+                                    <i class="fa fa-user-graduate"></i><span>Siswa</span>
+                                </label>
+                            </div>
+
+                            <!-- ROLE ORANG TUA -->
+                            <div class="role-option">
+                                <input type="radio" id="roleOrtu" name="role" value="orangtua">
+                                <label for="roleOrtu" class="role-label">
+                                    <i class="fa fa-user-group"></i><span>Orang Tua</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label">Username / NIS</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn-login w-100">
+                            <i class="fa fa-sign-in-alt me-2"></i> Login
+                        </button>
+                    </form>
+
+                    <!-- REGISTER FORM -->
+                    <form id="registerForm" class="d-none" onsubmit="handleRegister(event)">
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Nama Lengkap</label>
+                            <input type="text" id="fullName" name="fullName" class="form-control"
+                                placeholder="Masukkan nama lengkap" required>
+                            <small class="text-muted d-block mt-1">Nama akan ditampilkan di dashboard</small>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Username / NIS</label>
+                            <input type="text" id="regUsername" name="regUsername" class="form-control"
+                                placeholder="Contoh: siswa001 atau guru01" required>
+                            <small class="text-muted d-block mt-1">Username harus unik (3-20 karakter)</small>
+                            <small id="usernameStatus" class="d-block mt-1"></small>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input type="password" id="regPassword" name="regPassword" class="form-control"
+                                placeholder="Minimal 6 karakter" required>
+                            <div id="passwordStrength" class="progress mt-2" style="height: 5px; display:none;">
+                                <div class="progress-bar" id="strengthBar" style="width: 0%"></div>
+                            </div>
+                            <small id="passwordStatus" class="d-block mt-1 text-muted">Minimal 6 karakter</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Konfirmasi Password</label>
+                            <input type="password" id="regPasswordConfirm" name="regPasswordConfirm"
+                                class="form-control" placeholder="Ulangi password" required>
+                            <small id="confirmStatus" class="d-block mt-1"></small>
+                        </div>
+
+                        <label class="fw-semibold mb-3 d-block">Pilih Role/Kategori:</label>
+                        <div class="role-selector mb-4">
+                            <div class="role-option">
+                                <input type="radio" id="regRoleSiswa" name="regRole" value="siswa" checked>
+                                <label for="regRoleSiswa" class="role-label">
+                                    <i class="fa fa-user-graduate"></i>
+                                    <div>
+                                        <span class="d-block fw-semibold">Siswa</span>
+                                        <small class="d-block" style="font-size:11px;">Pelajar sekolah</small>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="role-option">
+                                <input type="radio" id="regRoleGuru" name="regRole" value="guru">
+                                <label for="regRoleGuru" class="role-label">
+                                    <i class="fa fa-chalkboard-teacher"></i>
+                                    <div>
+                                        <span class="d-block fw-semibold">Guru</span>
+                                        <small class="d-block" style="font-size:11px;">Pengajar</small>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="role-option">
+                                <input type="radio" id="regRoleOrtu" name="regRole" value="orangtua">
+                                <label for="regRoleOrtu" class="role-label">
+                                    <i class="fa fa-user-group"></i>
+                                    <div>
+                                        <span class="d-block fw-semibold">Orang Tua</span>
+                                        <small class="d-block" style="font-size:11px;">Wali siswa</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Password Requirements Checklist -->
+                        <div id="passwordChecklist" class="alert alert-light border mb-3"
+                            style="display:none; padding:10px;">
+                            <small class="d-block mb-2"><strong>Persyaratan Password:</strong></small>
+                            <small class="d-flex align-items-center mb-1">
+                                <span id="check1" class="me-2" style="color:#999;">✗</span>
+                                Minimal 6 karakter
+                            </small>
+                            <small class="d-flex align-items-center mb-1">
+                                <span id="check2" class="me-2" style="color:#999;">✗</span>
+                                Mengandung huruf besar
+                            </small>
+                            <small class="d-flex align-items-center">
+                                <span id="check3" class="me-2" style="color:#999;">✗</span>
+                                Mengandung angka
+                            </small>
+                        </div>
+
+                        <button type="submit" id="submitRegisterBtn" class="btn btn-success w-100 mb-2" disabled>
+                            <i class="fa fa-user-plus me-2"></i>Daftar Akun
+                        </button>
+                        <button type="button" id="cancelRegisterBtn" class="btn btn-outline-secondary w-100">
+                            <i class="fa fa-times me-2"></i>Batal
+                        </button>
+                    </form>
+
+                    <div class="demo-info mt-3">
+                        <strong>Akun Demo:</strong><br>
+                        • Admin: <code>admin</code> / <code>123456</code><br>
+                        • Guru: <code>guru01</code> / <code>123456</code><br>
+                        • Siswa: <code>siswa001</code> / <code>123456</code><br>
+                        • Orang Tua: <code>ortu001</code> / <code>123456</code>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-text text-center mt-3">
+            © 2025 SIAKAD SMP YPPGI Bomou
+        </div>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core scripts from assets/js/ -->
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/login.js"></script>
+    <script src="assets/js/login-init.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,630 @@
+body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/assets/img/bg-login.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 900px;
+  /* wider to accommodate two-column layout */
+  padding: 24px;
+  margin: 40px auto;
+  /* center with breathing room */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  padding: 32px 28px;
+  /* slightly reduced for better balance */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+  .login-container {
+    max-width: 100%;
+    padding: 12px;
+    margin: 20px auto;
+    box-sizing: border-box;
+  }
+
+  .login-card {
+    padding: 20px 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
+  }
+
+  .role-label {
+    padding: 10px;
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.login-header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.login-header p {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 8px;
+}
+
+.form-control {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ===== ROLE SELECTOR STYLING ===== */
+
+/* Base role selector grid */
+.role-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.role-option {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.role-option input[type="radio"] {
+  display: none !important;
+}
+
+/* ===== LOGIN FORM ROLE LABELS (VERTICAL) ===== */
+
+.role-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.role-label:hover {
+  border-color: #999;
+  background-color: #f5f5f5;
+}
+
+.role-label i {
+  font-size: 24px;
+  margin-bottom: 6px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.role-label span {
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* ===== REGISTER FORM ROLE LABELS (SAME AS LOGIN - VERTICAL CENTERED) ===== */
+
+#registerForm .role-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#registerForm .role-option {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#registerForm .role-label {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 10px !important;
+  gap: 6px !important;
+  border: 2px solid #ddd !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  background: white !important;
+  text-align: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+#registerForm .role-label:hover {
+  border-color: #999 !important;
+  background-color: #f5f5f5 !important;
+}
+
+#registerForm .role-label i {
+  font-size: 24px !important;
+  margin-bottom: 2px !important;
+  margin-right: 0 !important;
+  margin-top: 0 !important;
+  color: #666 !important;
+  transition: all 0.3s ease !important;
+}
+
+#registerForm .role-label div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  width: 100% !important;
+  align-items: center !important;
+}
+
+#registerForm .role-label span {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  transition: all 0.3s ease !important;
+  text-align: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+#registerForm .role-label small {
+  font-size: 11px !important;
+  color: #999 !important;
+  transition: all 0.3s ease !important;
+  text-align: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Checked/Selected state for register form */
+#registerForm input[type="radio"]:checked + .role-label {
+  border-color: #667eea !important;
+  background: rgba(102, 126, 234, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.2) !important;
+}
+
+#registerForm input[type="radio"]:checked + .role-label i {
+  color: #667eea !important;
+  font-size: 28px !important;
+}
+
+#registerForm input[type="radio"]:checked + .role-label span {
+  color: #667eea !important;
+  font-weight: 600 !important;
+}
+
+#registerForm input[type="radio"]:checked + .role-label small {
+  color: #667eea !important;
+  font-weight: 500 !important;
+}
+
+/* Checked/Selected state for login form */
+.role-option input[type="radio"]:checked + .role-label {
+  border-color: #667eea !important;
+  background: rgba(102, 126, 234, 0.08) !important;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2) !important;
+}
+
+.role-option input[type="radio"]:checked + .role-label i {
+  color: #667eea !important;
+}
+
+.role-option input[type="radio"]:checked + .role-label span {
+  color: #667eea !important;
+  font-weight: 600 !important;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.demo-info {
+  background: #f0f4ff;
+  border-left: 4px solid #667eea;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #555;
+}
+
+.demo-info strong {
+  color: #333;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  display: none;
+}
+
+.footer-text {
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+/* ===== FORM REGISTER ENHANCEMENTS ===== */
+
+/* Status indicators */
+#usernameStatus,
+#passwordStatus,
+#confirmStatus {
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Password strength indicators */
+.progress {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Checklist styling */
+#passwordChecklist {
+  border-left: 3px solid #667eea;
+  background-color: #f8f9ff;
+}
+
+#passwordChecklist small {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+#passwordChecklist .text-warning {
+  color: #ffc107 !important;
+}
+
+#passwordChecklist .text-success {
+  color: #28a745 !important;
+}
+
+/* Form controls with visual feedback */
+.form-control:valid {
+  border-color: #28a745;
+  background-image: none;
+}
+
+.form-control:invalid {
+  border-color: #dc3545;
+  background-image: none;
+}
+
+/* Submit button disabled state */
+#submitRegisterBtn {
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+#submitRegisterBtn:disabled {
+  cursor: not-allowed;
+  background-color: #e9ecef;
+  border-color: #ddd;
+}
+
+#submitRegisterBtn:not(:disabled) {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+#submitRegisterBtn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+}
+
+/* Loading state for form */
+form.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Form labels enhanced */
+.form-label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+#registerForm .form-label {
+  font-size: 13px;
+}
+
+/* Small help text */
+#registerForm small {
+  transition: all 0.3s ease;
+}
+
+/* Smooth form transitions */
+form.animate-form {
+  animation: scaleFade 0.4s ease;
+}
+
+/* ===== RESPONSIVE DESIGN FOR REGISTER FORM ===== */
+
+/* Tablet (769px - 1199px) */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .role-selector {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-selector {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-option {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #registerForm .role-label {
+    padding: 12px 10px !important;
+    gap: 6px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #registerForm .role-label i {
+    font-size: 22px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #registerForm .role-label span {
+    font-size: 12px !important;
+  }
+
+  #registerForm .role-label small {
+    font-size: 10px !important;
+  }
+
+  #registerForm input[type="radio"]:checked + .role-label i {
+    font-size: 26px !important;
+  }
+}
+
+/* Small Tablet (577px - 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .role-selector {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-selector {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-option {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #registerForm .role-label {
+    padding: 12px 10px !important;
+    gap: 4px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #registerForm .role-label i {
+    font-size: 20px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #registerForm .role-label div {
+    gap: 2px !important;
+  }
+
+  #registerForm .role-label span {
+    font-size: 11px !important;
+  }
+
+  #registerForm .role-label small {
+    font-size: 10px !important;
+  }
+
+  #registerForm input[type="radio"]:checked + .role-label i {
+    font-size: 24px !important;
+  }
+}
+
+/* Mobile (576px and below) */
+@media (max-width: 576px) {
+  .role-selector {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-selector {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-option {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #registerForm .role-label {
+    padding: 12px 10px !important;
+    gap: 4px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #registerForm .role-label i {
+    font-size: 20px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #registerForm .role-label div {
+    gap: 2px !important;
+  }
+
+  #registerForm .role-label span {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+  }
+
+  #registerForm .role-label small {
+    font-size: 10px !important;
+  }
+
+  #registerForm input[type="radio"]:checked + .role-label i {
+    font-size: 24px !important;
+  }
+}
+
+/* Large screens (1200px and above) */
+@media (min-width: 1200px) {
+  .role-selector {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-selector {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    max-width: 100% !important;
+  }
+
+  #registerForm .role-option {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #registerForm .role-label {
+    padding: 14px 12px !important;
+    gap: 8px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #registerForm .role-label i {
+    font-size: 26px !important;
+    margin-bottom: 4px !important;
+  }
+
+  #registerForm .role-label span {
+    font-size: 13px !important;
+  }
+
+  #registerForm .role-label small {
+    font-size: 12px !important;
+  }
+
+  #registerForm input[type="radio"]:checked + .role-label i {
+    font-size: 30px !important;
+  }
+}
+
+/* Animation for role label selection */
+@keyframes selectPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+}
+
+#registerForm input[type="radio"]:checked + .role-label {
+  animation: selectPulse 0.6s ease-out;
+}
+
+/* Focus state for accessibility */
+#registerForm input[type="radio"]:focus + .role-label {
+  outline: 2px solid #667eea !important;
+  outline-offset: 2px !important;
+}

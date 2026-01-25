@@ -1,0 +1,2758 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIAKAD - SMP YPPGI Bomou</title>
+
+    <!-- style css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Load script.js early to access auth functions -->
+    <script src="assets/js/script.js"></script>
+
+    <!-- AUTH CHECK - MUST LOGIN FIRST (From script.js) -->
+    <script>
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                checkAuthBeforePageLoad('admin');
+            });
+        } else {
+            checkAuthBeforePageLoad('admin');
+        }
+    </script>
+
+    <style>
+        .hover-shadow {
+            transition: all 0.2s ease;
+        }
+
+        .hover-shadow:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+
+        /* Alpine.js animations */
+        [x-cloak] {
+            display: none;
+        }
+
+        .slide-enter {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Smooth transitions */
+        .section-transition {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Active states for sidebar */
+        .sidebar-active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-left: 3px solid #6366f1;
+        }
+
+        /* Modern checkbox */
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: #6366f1;
+        }
+
+        /* Enhanced form controls */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Notification Styling */
+        .border-danger-subtle {
+            border-color: rgba(239, 68, 68, 0.3) !important;
+        }
+
+        .bg-danger-light {
+            background-color: rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .border-warning-subtle {
+            border-color: rgba(245, 158, 11, 0.3) !important;
+        }
+
+        .bg-warning-light {
+            background-color: rgba(245, 158, 11, 0.1) !important;
+        }
+
+        .border-info-subtle {
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+
+        .bg-info-light {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .border-success-subtle {
+            border-color: rgba(16, 185, 129, 0.3) !important;
+        }
+
+        .bg-success-light {
+            background-color: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        /* Notification hover effect */
+        .app-card li[style*="cursor"] {
+            transition: all 0.3s ease;
+        }
+
+        .app-card li[style*="cursor"]:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button size variants */
+        .btn-xs {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.25rem;
+        }
+
+        /* Notification badge animation */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .badge {
+            animation: pulse 2s infinite;
+        }
+
+        /* Filter buttons styling */
+        .btn-outline-danger:hover,
+        .btn-danger {
+            color: #fff;
+            background-color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .btn-outline-info:hover,
+        .btn-info {
+            color: #fff;
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .btn-outline-warning:hover,
+        .btn-warning {
+            color: #fff;
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+        }
+
+        .btn-outline-success:hover,
+        .btn-success {
+            color: #fff;
+            background-color: #10b981;
+            border-color: #10b981;
+        }
+
+        /* Announcement Styling */
+        .bg-success-light {
+            background-color: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .border-success-subtle {
+            border-color: rgba(16, 185, 129, 0.3) !important;
+        }
+
+        /* Alpine.js Modal Enhancement */
+        .modal[x-show] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1050;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal[x-show] .modal-dialog {
+            margin: 0;
+            position: relative;
+        }
+
+        .modal[x-show][style*="display: none"] {
+            display: none !important;
+        }
+
+        /* ===== DASHBOARD STYLING IMPROVEMENTS ===== */
+
+        /* App Card Enhanced Styling */
+        .app-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .app-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 5px 10px rgba(0, 0, 0, 0.05);
+            border-color: #d1d5db;
+            transform: translateY(-2px);
+        }
+
+        /* Summary Cards Grid - NO GAPS */
+        .summary-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Summary Cards - Enhanced */
+        .summary-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            padding: 1.25rem !important;
+            margin: 0 0.6rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            min-height: 120px;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .summary-card:hover::before {
+            opacity: 1;
+        }
+
+        .summary-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+            border-color: #d1d5db;
+        }
+
+        .summary-card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0.3rem 0;
+            letter-spacing: -0.025em;
+        }
+
+        .summary-card h6 {
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card i {
+            font-size: 2.2rem;
+            opacity: 0.85;
+            transition: transform 0.3s ease;
+        }
+
+        .summary-card:hover i {
+            transform: scale(1.12) rotate(5deg);
+        }
+
+        /* Responsive Summary Cards */
+        @media (max-width: 1200px) {
+            .summary-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .summary-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Dashboard Main Section */
+        #section-dashboard {
+            gap: 1.5rem;
+        }
+
+        /* Left Column Content */
+        .lg\\:col-span-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Right Column - Notifications */
+        #section-dashboard>div:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Jadwal Card */
+        .app-card.p-4.mb-4 {
+            transition: all 0.3s ease;
+        }
+
+        .app-card.p-4.mb-4 h5 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .app-card.p-4.mb-4 .list-group-item {
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .app-card.p-4.mb-4 .list-group-item:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+            transform: translateX(4px);
+        }
+
+        .app-card.p-4.mb-4 .list-group-item strong {
+            display: block;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .app-card.p-4.mb-4 .badge {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.65rem;
+        }
+
+        /* Grafik Card */
+        #section-dashboard canvas {
+            max-height: 250px;
+            margin-top: 1rem;
+        }
+
+        /* Notifikasi Section */
+        .app-card.p-4.mb-4 h6 {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .app-card.p-4.mb-4 h6 i {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        /* Filter Buttons Container */
+        .d-flex.gap-2.mb-3.flex-wrap {
+            padding: 0.5rem 0;
+            border-radius: 0.5rem;
+        }
+
+        .btn.btn-xs {
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            white-space: nowrap;
+        }
+
+        .btn.btn-xs:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Notification List */
+        .list-unstyled.mt-3.small {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .list-unstyled.mt-3.small::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .list-unstyled.mt-3.small::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .list-unstyled.mt-3.small::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .list-unstyled.mt-3.small::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Notification Items */
+        .list-unstyled li.mb-3 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.5rem;
+        }
+
+        .list-unstyled li.mb-3:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Notification Stats */
+        .row.g-2.mt-3.pt-3.border-top {
+            border-top: 1px solid #e5e7eb !important;
+            margin-top: 1.5rem !important;
+            padding-top: 1.5rem !important;
+        }
+
+        .row.g-2.mt-3.pt-3.border-top .col-4 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .row.g-2.mt-3.pt-3.border-top strong {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        /* Quick Actions Card */
+        .border-2.border-info.border-opacity-25 {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(99, 102, 241, 0.03) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2) !important;
+        }
+
+        .border-2.border-info.border-opacity-25 h6 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .border-2.border-info.border-opacity-25 .d-grid {
+            gap: 0.75rem;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn {
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+        }
+
+        .border-2.border-info.border-opacity-25 .badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        /* Keuangan Section */
+        .app-card.p-4:last-child h6 {
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .app-card.p-4:last-child p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .app-card.p-4:last-child strong {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .app-card.p-4:last-child .text-success {
+            color: #10b981 !important;
+            font-weight: 600;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            #section-dashboard {
+                grid-template-columns: 1fr !important;
+            }
+
+            .lg\\:col-span-2 {
+                grid-column: span 1 !important;
+            }
+
+            #section-dashboard>div:last-child {
+                grid-column: span 1 !important;
+            }
+        }
+
+        /* ===== SIDEBAR STYLING ===== */
+        .sidebar {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%);
+            border-right: 2px solid #e5e7eb;
+            max-height: 100vh;
+            overflow-y: auto;
+            width: 280px;
+            padding: 1.5rem;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .sidebar h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar .text-muted {
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .sidebar .nav {
+            gap: 0.5rem;
+        }
+
+        .sidebar .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+            color: #6366f1;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar .nav-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+            width: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .sidebar-active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.08) 100%);
+            color: #6366f1;
+            border-left: 3px solid #6366f1;
+            padding-left: 1.25rem;
+            font-weight: 600;
+        }
+
+        .sidebar .sidebar-active::before {
+            transform: scaleY(1);
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+        }
+
+        .sidebar .sidebar-active i {
+            color: #6366f1;
+            transform: scale(1.1);
+        }
+
+        /* ===== RIGHT COLUMN LAYOUT ===== */
+        #section-dashboard>div:last-child {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 1.5rem;
+            height: fit-content;
+        }
+
+        /* Notifications Card */
+        #section-dashboard .app-card.p-4.mb-2:nth-of-type(1) {
+            grid-row: 2 / 4;
+            order: 2;
+        }
+
+        /* Quick Actions - Top Right */
+        .border-2.border-info.border-opacity-25 {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(99, 102, 241, 0.03) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.25) !important;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.08);
+            grid-row: 1;
+            order: 1;
+        }
+
+        .border-2.border-info.border-opacity-25:hover {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.35) !important;
+        }
+
+        .border-2.border-info.border-opacity-25 h6 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+        }
+
+        .border-2.border-info.border-opacity-25 small {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .border-2.border-info.border-opacity-25 .d-grid {
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn {
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.5rem;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .border-2.border-info.border-opacity-25 .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+        }
+
+        .border-2.border-info.border-opacity-25 .badge {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            animation: pulse 2s infinite;
+            background-color: #3b82f6 !important;
+        }
+
+        .border-2.border-info.border-opacity-25 .mt-3.pt-3 {
+            margin-top: 1rem !important;
+            padding-top: 1rem !important;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Keuangan Section Enhancement */
+        .app-card.p-4:last-child {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #10b981;
+            grid-row: 4;
+            order: 3;
+        }
+
+        .app-card.p-4:last-child:hover {
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.12);
+            border-left-color: #059669;
+        }
+
+        .app-card.p-4:last-child h6 {
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .app-card.p-4:last-child h6 i {
+            color: #10b981;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .app-card.p-4:last-child p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .app-card.p-4:last-child strong {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 0.5rem;
+            color: #1f2937;
+        }
+
+        .app-card.p-4:last-child .text-success {
+            color: #10b981 !important;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        .app-card.p-4:last-child .text-muted {
+            font-size: 0.85rem;
+            color: #6b7280 !important;
+        }
+
+        .app-card.p-4:last-child hr {
+            background-color: rgba(16, 185, 129, 0.15);
+            margin: 1rem 0;
+        }
+
+        /* Main Content Styling */
+        main.flex-1.p-4 {
+            background-color: #f9fafb;
+            overflow-y: auto;
+            max-height: calc(100vh - 80px);
+        }
+
+        @media (max-width: 1024px) {
+            #section-dashboard>div:last-child {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+            }
+
+            #section-dashboard .app-card.p-4.mb-2:nth-of-type(1) {
+                grid-row: 2 / 3;
+            }
+
+            .app-card.p-4:last-child {
+                grid-row: 4;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid.grid-cols-1.sm\\:grid-cols-3 {
+                grid-template-columns: 1fr !important;
+            }
+
+            .app-card.p-4.mb-4 .list-group-item {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .list-unstyled.mt-3.small {
+                max-height: 400px;
+            }
+
+            .border-2.border-info.border-opacity-25 .d-grid {
+                gap: 0.5rem;
+            }
+
+            .border-2.border-info.border-opacity-25 .btn {
+                padding: 0.65rem 0.85rem;
+                font-size: 0.9rem;
+            }
+
+            .sidebar {
+                width: 250px;
+                padding: 1rem;
+            }
+
+            main.flex-1.p-4 {
+                padding: 1rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans text-slate-800" x-cloak x-data="adminApp()" @load="init()">
+
+    <!-- Topbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center">
+                <button @click="toggleSidebar()" class="btn btn-light me-2 d-lg-none"><i
+                        class="fa fa-bars"></i></button>
+                <a class="navbar-brand fw-bold" href="#">SIAKAD — SMP YPPGI Bomou</a>
+                <small class="text-muted ms-3 d-none d-md-inline">Kab. Deiyai</small>
+            </div>
+
+            <div class="d-flex align-items-center ms-auto gap-3">
+                <div class="dropdown" @click.away="showNotifications = false">
+                    <a href="#" class="d-flex align-items-center text-decoration-none transition-all"
+                        data-bs-toggle="dropdown" @click.prevent="showNotifications = !showNotifications">
+                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff"
+                            alt="avatar" class="rounded-circle" width="36" height="36">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end animate-fade" :class="{'show': showNotifications}">
+                        <li><span class="dropdown-item disabled" id="userName">Admin</span></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item transition-all" href="#"
+                                @click.prevent="alpinejsEditProfile(); showNotifications = false">Profil</a>
+                        </li>
+                        <li><a class="dropdown-item transition-all" href="#"
+                                @click.prevent="alpinejsEditProfile(); showNotifications = false">Pengaturan</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger transition-all" href="login.html"
+                                @click.prevent="alpinejsLogout(); showNotifications = false">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar bg-white border-end d-none d-lg-block p-4" :class="{'active': sidebarOpen}"
+            @click.away="sidebarOpen = false">
+            <div class="mb-4">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                    <i class="fa fa-compass text-primary" style="font-size: 1.25rem;"></i>
+                    <h5 class="fw-bold mb-0">Menu</h5>
+                </div>
+                <p class="text-muted small mb-0">Role: <span id="sidebarRole"
+                        style="font-weight: 600; color: #6366f1;">Admin</span></p>
+            </div>
+
+            <nav class="nav flex-column gap-1" id="menuAdmin">
+                <template x-for="item in menuItems" :key="item.id">
+                    <a class="nav-link px-3 py-2 d-flex align-items-center transition-all"
+                        :class="{'sidebar-active': activeSection === item.section}"
+                        @click.prevent="activeSection = item.section; sidebarOpen = false" :href="`#${item.section}`">
+                        <i class="me-3" :class="item.icon"></i>
+                        <span x-text="item.label"></span>
+                    </a>
+                </template>
+            </nav>
+
+            <!-- Sidebar for Guru -->
+            <nav class="nav flex-column gap-1 d-none" id="menuGuru">
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="dashboard"><i
+                        class="fa fa-home me-3"></i>Dashboard</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="absensi-kelas"><i
+                        class="fa fa-check me-3"></i>Absensi Kelas</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="input-nilai"><i
+                        class="fa fa-pen me-3"></i>Input Nilai</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="jadwal-mengajar"><i
+                        class="fa fa-calendar-week me-3"></i>Jadwal Mengajar</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="laporan-nilai"><i
+                        class="fa fa-file-lines me-3"></i>Laporan Nilai</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="profil-guru"><i
+                        class="fa fa-user me-3"></i>Profil Guru</a>
+            </nav>
+
+            <!-- Sidebar for Siswa -->
+            <nav class="nav flex-column gap-1 d-none" id="menuSiswa">
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="dashboard"><i
+                        class="fa fa-home me-3"></i>Dashboard</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="jadwal-pelajaran"><i
+                        class="fa fa-calendar-day me-3"></i>Jadwal Pelajaran</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="nilai-siswa"><i
+                        class="fa fa-star me-3"></i>Nilai</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="absensi-siswa"><i
+                        class="fa fa-check-square me-3"></i>Absensi</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="pembayaran"><i
+                        class="fa fa-money-bill-wave me-3"></i>Pembayaran SPP</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="cetak-raport"><i
+                        class="fa fa-print me-3"></i>Cetak Raport</a>
+                <a class="nav-link px-3 py-2 d-flex align-items-center" href="#" data-section="profil-siswa"><i
+                        class="fa fa-user me-3"></i>Profil Siswa</a>
+            </nav>
+
+        </aside>
+
+        <!-- Main content -->
+        <main class="flex-1 p-4">
+            <!-- Admin dashboard -->
+            <section id="section-dashboard"
+                class="grid grid-cols-1 lg:grid-cols-3 gap-6 section-transition animate-fade"
+                x-show="activeSection === 'dashboard'">
+
+                <!-- LEFT COLUMN -->
+                <div class="lg:col-span-2">
+
+                    <!-- SUMMARY CARDS -->
+                    <div class="summary-cards-grid">
+
+                        <div class="app-card summary-card">
+                            <div class="d-flex justify-content-between align-items-center h-100">
+                                <div>
+                                    <h6 class="text-muted mb-1">Jumlah Siswa</h6>
+                                    <h3 id="countSiswa" x-text="totalSiswa">0</h3>
+                                    <small class="text-success">▲ Siswa terdaftar</small>
+                                </div>
+                                <i class="fa fa-user-graduate text-primary fs-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="app-card summary-card">
+                            <div class="d-flex justify-content-between align-items-center h-100">
+                                <div>
+                                    <h6 class="text-muted mb-1">Jumlah Guru</h6>
+                                    <h3 id="countGuru" x-text="totalGuru">0</h3>
+                                    <small class="text-success">▲ Guru terdaftar</small>
+                                </div>
+                                <i class="fa fa-chalkboard-teacher text-success fs-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="app-card summary-card">
+                            <div class="d-flex justify-content-between align-items-center h-100">
+                                <div>
+                                    <h6 class="text-muted mb-1">Jumlah Kelas</h6>
+                                    <h3 id="countKelas" x-text="totalKelas">0</h3>
+                                    <small class="text-muted">Kelas tersedia</small>
+                                </div>
+                                <i class="fa fa-school text-warning fs-2"></i>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- JADWAL -->
+                    <div class="app-card p-4 mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Jadwal Hari Ini</h5>
+                            <small class="text-muted" x-text="getTanggalHariIni()">Senin, 01 Januari 2025</small>
+                        </div>
+
+                        <div class="list-group">
+                            <template x-for="(jadwal, index) in jadwalHariIni" :key="index">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong x-text="jadwal.jam_mulai + ' - ' + jadwal.jam_selesai"></strong><br>
+                                        <span x-text="jadwal.mapel"></span>
+                                        <span class="badge ms-2"
+                                            :class="getStatusJadwal(jadwal.jam_selesai) === 'Aktif' ? 'bg-success' : 'bg-secondary'"
+                                            x-text="getStatusJadwal(jadwal.jam_selesai)"></span><br>
+                                        <small class="text-muted">Kelas <span x-text="jadwal.kelas"></span></small>
+                                    </div>
+                                    <small class="text-muted">Ruang <span x-text="jadwal.ruang"></span></small>
+                                </div>
+                            </template>
+                            <template x-if="jadwalHariIni.length === 0">
+                                <div class="list-group-item text-center text-muted py-3">
+                                    <i class="fa fa-calendar-times me-2"></i> Tidak ada jadwal hari ini
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- GRAFIK -->
+                    <div class="app-card p-4 mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Grafik Kehadiran (30 Hari)</h5>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart()">
+                                <i class="fa fa-download me-1"></i> Export
+                            </button>
+                        </div>
+                        <canvas id="chartKehadiran" height="120"></canvas>
+                    </div>
+                    <!-- KEUANGAN -->
+                    <div class="app-card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa fa-wallet me-2 text-success" style="font-size: 1.3rem;"></i>
+                            <h6 class="mb-0">Ringkasan Keuangan</h6>
+                        </div>
+
+                        <div
+                            style="padding: 1rem; background-color: rgba(16, 185, 129, 0.05); border-radius: 0.5rem; margin-bottom: 1rem;">
+                            <small class="text-muted d-block mb-2">Tagihan Aktif</small>
+                            <strong class="d-block" style="font-size: 1.3rem; color: #1f2937;"
+                                x-text="formatCurrency(totalTagihanAktif)">Rp 0</strong>
+                        </div>
+
+                        <div
+                            style="padding: 1rem; background-color: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; margin-bottom: 1rem; border-left: 3px solid #10b981;">
+                            <small class="text-muted d-block mb-2">Pembayaran Bulan Ini</small>
+                            <strong class="text-success" style="font-size: 1.3rem; display: block;"
+                                x-text="formatCurrency(totalPembayaranBulanIni)">Rp 0</strong>
+                        </div>
+
+                        <div style="padding: 1rem; background-color: #f3f4f6; border-radius: 0.5rem;">
+                            <small class="text-muted d-flex align-items-center">
+                                <i class="fa fa-exclamation-circle me-2" style="color: #ef4444;"></i>
+                                SPP Tunggakan: <strong class="ms-2" style="color: #ef4444;"
+                                    x-text="sppTunggak + ' siswa'">0</strong>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div>
+
+                    <!-- NOTIFIKASI -->
+                    <div class="app-card p-4 mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="mb-0"><i class="fa fa-bell me-2 text-warning"></i>Notifikasi Penting</h6>
+                                <span class="badge bg-danger" x-show="unreadNotificationCount > 0"
+                                    x-text="unreadNotificationCount">0</span>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" @click="clearAllNotifications()"
+                                x-show="dismissedNotifications.length > 0" title="Reset notifikasi">
+                                <i class="fa fa-redo me-1"></i> Reset
+                            </button>
+                        </div>
+
+                        <!-- Filter Notifikasi -->
+                        <div class="d-flex gap-2 mb-3 flex-wrap">
+                            <button class="btn btn-xs"
+                                :class="notificationFilter === 'all' ? 'btn-primary' : 'btn-outline-primary'"
+                                @click="notificationFilter = 'all'">
+                                <i class="fa fa-list me-1"></i> Semua
+                            </button>
+                            <button class="btn btn-xs"
+                                :class="notificationFilter === 'keuangan' ? 'btn-danger' : 'btn-outline-danger'"
+                                @click="notificationFilter = 'keuangan'">
+                                <i class="fa fa-wallet me-1"></i> Keuangan
+                            </button>
+                            <button class="btn btn-xs"
+                                :class="notificationFilter === 'akademik' ? 'btn-info' : 'btn-outline-info'"
+                                @click="notificationFilter = 'akademik'">
+                                <i class="fa fa-book me-1"></i> Akademik
+                            </button>
+                            <button class="btn btn-xs"
+                                :class="notificationFilter === 'kehadiran' ? 'btn-warning' : 'btn-outline-warning'"
+                                @click="notificationFilter = 'kehadiran'">
+                                <i class="fa fa-user-clock me-1"></i> Kehadiran
+                            </button>
+                            <button class="btn btn-xs"
+                                :class="notificationFilter === 'Pengumuman' ? 'btn-success' : 'btn-outline-success'"
+                                @click="notificationFilter = 'Pengumuman'">
+                                <i class="fa fa-bullhorn me-1"></i> Pengumuman
+                            </button>
+                        </div>
+
+                        <!-- Notifikasi List -->
+                        <ul class="list-unstyled mt-3 small">
+                            <!-- PINNED ANNOUNCEMENTS SECTION -->
+                            <template x-if="pinnedPengumuman.length > 0">
+                                <li class="mb-2">
+                                    <strong class="d-block text-success mb-2">
+                                        <i class="fa fa-pin me-1"></i>Pengumuman Penting
+                                    </strong>
+                                    <template x-for="(announce, idx) in pinnedPengumuman" :key="announce.id">
+                                        <div class="mb-2 p-2 border border-success rounded"
+                                            :class="announce.isRead ? 'bg-white' : 'bg-success-light'">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <i class="fa fa-bullhorn text-success"></i>
+                                                        <strong x-text="announce.title"></strong>
+                                                        <span class="badge bg-success"
+                                                            x-show="!announce.isRead">Baru</span>
+                                                        <small class="text-muted ms-auto"
+                                                            x-text="announce.author"></small>
+                                                    </div>
+                                                    <p class="mb-2 mt-1 text-muted small"
+                                                        x-text="announce.content.substring(0, 80) + '...'"></p>
+                                                    <small class="text-muted">
+                                                        <i class="fa fa-clock me-1"></i>
+                                                        <span
+                                                            x-text="new Date(announce.timestamp).toLocaleDateString('id-ID', {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})"></span>
+                                                    </small>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <button class="btn btn-xs btn-outline-success"
+                                                        @click="viewAnnouncement(announce.id)"
+                                                        title="Lihat selengkapnya">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-xs btn-outline-danger"
+                                                        @click="pinAnnouncement(announce.id)" title="Lepas pin">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </li>
+                                <hr class="my-2">
+                            </template>
+
+                            <!-- REGULAR NOTIFICATIONS -->
+                            <template x-for="(notif, index) in notifikasi" :key="notif.id">
+                                <li class="mb-3 p-3 border rounded"
+                                    :class="'border-' + notif.type + '-subtle bg-' + notif.type + '-light'"
+                                    style="cursor: pointer; transition: all 0.3s ease;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa" :class="'fa-' + notif.icon + ' text-' + notif.type"></i>
+                                                <strong x-text="notif.title"></strong>
+                                                <span class="badge" :class="'bg-' + notif.type"
+                                                    x-text="notif.time"></span>
+                                            </div>
+                                            <p class="mb-2 mt-2 text-muted small" x-text="notif.description"></p>
+                                            <button class="btn btn-xs" :class="'btn-' + notif.type"
+                                                @click="executeNotificationAction(notif.id)">
+                                                <i class="fa fa-arrow-right me-1"></i> <span
+                                                    x-text="notif.actionText"></span>
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-secondary"
+                                            @click.stop="dismissNotification(notif.id)" title="Tutup notifikasi">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </template>
+
+                            <!-- ANNOUNCEMENTS SECTION -->
+                            <template
+                                x-if="(notificationFilter === 'all' || notificationFilter === 'Pengumuman') && activePengumuman.length > pinnedPengumuman.length">
+                                <li class="mb-2">
+                                    <strong class="d-block text-info mb-2">
+                                        <i class="fa fa-bullhorn me-1"></i>Pengumuman
+                                    </strong>
+                                    <template x-for="(announce, idx) in activePengumuman.filter(p => !p.isPinned)"
+                                        :key="announce.id">
+                                        <div class="mb-2 p-2 border border-info rounded"
+                                            :class="announce.isRead ? 'bg-white' : 'bg-info-light'">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <i class="fa fa-bullhorn text-info"></i>
+                                                        <strong x-text="announce.title"></strong>
+                                                        <span class="badge bg-info"
+                                                            x-show="!announce.isRead">Baru</span>
+                                                        <small class="text-muted ms-auto"
+                                                            x-text="announce.author"></small>
+                                                    </div>
+                                                    <p class="mb-2 mt-1 text-muted small"
+                                                        x-text="announce.content.substring(0, 80) + '...'"></p>
+                                                    <small class="text-muted">
+                                                        <i class="fa fa-clock me-1"></i>
+                                                        <span
+                                                            x-text="new Date(announce.timestamp).toLocaleDateString('id-ID', {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})"></span>
+                                                    </small>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <button class="btn btn-xs btn-outline-info"
+                                                        @click="viewAnnouncement(announce.id)"
+                                                        title="Lihat selengkapnya">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-xs btn-outline-warning"
+                                                        @click="pinAnnouncement(announce.id)" title="Sematkan">
+                                                        <i class="fa fa-thumbtack"></i>
+                                                    </button>
+                                                    <button class="btn btn-xs btn-outline-secondary"
+                                                        @click="archiveAnnouncement(announce.id)" title="Arsipkan">
+                                                        <i class="fa fa-archive"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </li>
+                            </template>
+
+                            <template x-if="notifikasi.length === 0 && activePengumuman.length === 0">
+                                <li class="text-center text-muted py-4">
+                                    <i class="fa fa-check-circle me-2 fs-3"></i><br>
+                                    Tidak ada notifikasi
+                                </li>
+                            </template>
+                        </ul>
+
+                        <!-- Notifikasi Stats -->
+                        <div class="row g-2 mt-3 pt-3 border-top"
+                            x-show="(unreadNotificationCount + unreadPengumuman.length) > 0">
+                            <div class="col-4 text-center">
+                                <small class="text-muted">Penting</small><br>
+                                <strong class="text-danger" x-text="notificationSummary.danger">0</strong>
+                            </div>
+                            <div class="col-4 text-center">
+                                <small class="text-muted">Perhatian</small><br>
+                                <strong class="text-warning" x-text="notificationSummary.warning">0</strong>
+                            </div>
+                            <div class="col-4 text-center">
+                                <small class="text-muted">Pengumuman</small><br>
+                                <strong class="text-success" x-text="unreadPengumuman.length">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUICK ACTION -->
+                    <div class="app-card p-4 mb-2 border-2 border-info border-opacity-25">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0"><i class="fa fa-bolt me-2 text-info"></i>Quick Actions</h6>
+                                <small class="text-muted">Akses cepat ke fitur utama</small>
+                            </div>
+                            <small class="badge bg-info text-white"
+                                style="font-size: 11px; white-space: nowrap; margin-left: 0.5rem;">
+                                <i class="fa fa-database me-1"></i><span x-text="siswaData.length">0</span>
+                            </small>
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <!-- Action 1: Tambah Siswa -->
+                            <button class="btn btn-primary d-flex align-items-center justify-content-between"
+                                @click="openAddSiswaModal()" @mouseover="$el.style.transform='scale(1.02)'"
+                                @mouseout="$el.style.transform='scale(1)'"
+                                style="transition: all 0.2s ease; position: relative; overflow: hidden;">
+                                <span>
+                                    <i class="fa fa-plus me-2"></i> Tambah Siswa
+                                </span>
+                                <span class="badge bg-white text-primary" x-text="totalSiswa"
+                                    title="Total siswa terdaftar">0</span>
+                            </button>
+
+                            <!-- Action 2: Import Excel -->
+                            <button class="btn btn-outline-primary d-flex align-items-center justify-content-between"
+                                @click="openModal('importExcel')" @mouseover="$el.style.transform='scale(1.02)'"
+                                @mouseout="$el.style.transform='scale(1)'"
+                                style="transition: all 0.2s ease; position: relative; overflow: hidden;">
+                                <span>
+                                    <i class="fa fa-file-excel me-2 text-success"></i> Import Excel
+                                </span>
+                                <small class="text-muted">Multiple data</small>
+                            </button>
+
+                            <!-- Action 3: Cetak Kartu -->
+                            <button class="btn btn-outline-secondary d-flex align-items-center justify-content-between"
+                                @click="openModal('cetakKartu')" @mouseover="$el.style.transform='scale(1.02)'"
+                                @mouseout="$el.style.transform='scale(1)'"
+                                style="transition: all 0.2s ease; position: relative; overflow: hidden;">
+                                <span>
+                                    <i class="fa fa-print me-2"></i> Cetak Kartu
+                                </span>
+                                <small class="text-muted">Print ID</small>
+                            </button>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="mt-3 pt-3 border-top" style="border-color: rgba(59, 130, 246, 0.2) !important;">
+                            <small class="text-muted d-flex justify-content-between align-items-center">
+                                <span><i
+                                        class="fa fa-check-circle text-success me-1"></i><strong>Terbaru:</strong></span>
+                                <span x-text="getTanggalHariIni()" style="font-size: 0.8rem;"></span>
+                            </small>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </section>
+
+
+            <!-- Data Master Section -->
+            <section id="section-data-master" class="mt-4" x-show="activeSection === 'data-master'"
+                aria-labelledby="title-data-master">
+
+                <h4 id="title-data-master" class="mb-4">Data Master – Ringkasan</h4>
+
+                <div class="row g-3">
+
+                    <!-- Guru -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="app-card p-4 text-center h-100 hover-shadow">
+                            <div class="mb-3">
+                                <i class="fa fa-chalkboard-teacher text-primary fs-1"></i>
+                            </div>
+                            <h6 class="mb-1">Total Guru</h6>
+                            <h3 id="countMasterGuru" class="text-primary" x-text="totalGuru">0</h3>
+                            <span class="badge" :class="totalGuru > 0 ? 'bg-success' : 'bg-secondary'"
+                                style="margin-bottom: 0.75rem; display: inline-block;">
+                                <i class="fa fa-circle me-1"></i>
+                                <span x-text="totalGuru > 0 ? 'Aktif' : 'Tidak Ada'"></span>
+                            </span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary w-100"
+                                    @click="navigateToSection('data-guru')" :disabled="totalGuru === 0">
+                                    Kelola Guru
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Siswa -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="app-card p-4 text-center h-100 hover-shadow">
+                            <div class="mb-3">
+                                <i class="fa fa-user-graduate text-success fs-1"></i>
+                            </div>
+                            <h6 class="mb-1">Total Siswa</h6>
+                            <h3 id="countMasterSiswa" class="text-success" x-text="totalSiswa">0</h3>
+                            <span class="badge" :class="totalSiswa > 0 ? 'bg-success' : 'bg-secondary'"
+                                style="margin-bottom: 0.75rem; display: inline-block;">
+                                <i class="fa fa-circle me-1"></i>
+                                <span x-text="totalSiswa > 0 ? 'Aktif' : 'Tidak Ada'"></span>
+                            </span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-success w-100"
+                                    @click="navigateToSection('data-siswa')" :disabled="totalSiswa === 0">
+                                    Kelola Siswa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kelas -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="app-card p-4 text-center h-100 hover-shadow">
+                            <div class="mb-3">
+                                <i class="fa fa-school text-info fs-1"></i>
+                            </div>
+                            <h6 class="mb-1">Total Kelas</h6>
+                            <h3 id="countMasterKelas" class="text-info" x-text="totalKelas">0</h3>
+                            <span class="badge" :class="totalKelas > 0 ? 'bg-info' : 'bg-secondary'"
+                                style="margin-bottom: 0.75rem; display: inline-block;">
+                                <i class="fa fa-circle me-1"></i>
+                                <span x-text="totalKelas > 0 ? 'Aktif' : 'Tidak Ada'"></span>
+                            </span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-info w-100"
+                                    @click="navigateToSection('data-kelas')" :disabled="totalKelas === 0">
+                                    Kelola Kelas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mapel -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="app-card p-4 text-center h-100 hover-shadow">
+                            <div class="mb-3">
+                                <i class="fa fa-book text-warning fs-1"></i>
+                            </div>
+                            <h6 class="mb-1">Total Mapel</h6>
+                            <h3 id="countMasterMapel" class="text-warning" x-text="totalMapel">0</h3>
+                            <span class="badge" :class="totalMapel > 0 ? 'bg-warning text-dark' : 'bg-secondary'"
+                                style="margin-bottom: 0.75rem; display: inline-block;">
+                                <i class="fa fa-circle me-1"></i>
+                                <span x-text="totalMapel > 0 ? 'Aktif' : 'Tidak Ada'"></span>
+                            </span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-warning w-100" @click="navigateToSection('mapel')"
+                                    :disabled="totalMapel === 0">
+                                    Kelola Mapel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <!-- QUICK ACTION -->
+                <h5 class="mb-3"><i class="fa fa-lightning-bolt me-2"></i>Aksi Cepat</h5>
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button class="btn btn-primary" @click="openAddGuruModal()">
+                        <i class="fa fa-user-plus me-2"></i>Tambah Guru
+                    </button>
+
+                    <button class="btn btn-success" @click="openAddSiswaModal()">
+                        <i class="fa fa-user-plus me-2"></i>Tambah Siswa
+                    </button>
+
+                    <button class="btn btn-info text-white" @click="openAddKelasModal()">
+                        <i class="fa fa-plus me-2"></i>Tambah Kelas
+                    </button>
+
+                    <button class="btn btn-primary" @click="openAddMapelModal()"><i class="fa fa-plus me-1"></i>Tambah
+                        Mapel</button>
+
+                </div>
+
+            </section>
+
+
+            <!-- Data Siswa Section (example) -->
+            <section id="section-data-siswa" class="mt-4" x-show="activeSection === 'data-siswa'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Data Siswa</h4>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" @click="exportData('siswa')"><i
+                                class="fa fa-file-excel me-1"></i>Export</button>
+                        <button class="btn btn-outline-primary me-2"
+                            @click="document.getElementById('importFileSiswa').click()"><i
+                                class="fa fa-file-import me-1"></i>Import</button>
+                        <input id="importFileSiswa" type="file" accept=".xls,.xlsx" class="d-none"
+                            @change="handleImportSiswa($event)">
+                        <button class="btn btn-primary" @click="openAddSiswaModal()"><i
+                                class="fa fa-plus me-1"></i>Tambah Siswa</button>
+                    </div>
+                </div>
+
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Foto</th>
+                                    <th>NIS</th>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Agama</th>
+                                    <th>Status Pemb.</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableSiswaBody">
+                                <template x-for="(siswa, index) in siswaData" :key="index">
+                                    <tr>
+                                        <td x-text="index + 1"></td>
+                                        <td>
+                                            <img :src="'https://ui-avatars.com/api/?name=' + siswa.nama"
+                                                :alt="siswa.nama" class="rounded-circle"
+                                                style="width: 32px; height: 32px;">
+                                        </td>
+                                        <td x-text="siswa.nis"></td>
+                                        <td x-text="siswa.nama"></td>
+                                        <td><span class="badge bg-light text-dark" x-text="siswa.kelas"></span></td>
+                                        <td x-text="siswa.agama"></td>
+                                        <td>
+                                            <span class="badge"
+                                                :class="siswa.statusPembayaran === 'Lunas' ? 'bg-success' : 'bg-warning text-dark'"
+                                                x-text="siswa.statusPembayaran">
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"
+                                                @click="editSiswa(index)">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" @click="deleteSiswa(index)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template x-if="siswaData.length === 0">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-3">
+                                            Tidak ada data siswa
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Guru Section -->
+            <section id="section-data-guru" class="mt-4" x-show="activeSection === 'data-guru'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Data Guru (<span x-text="totalGuru">0</span> guru)</h4>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" @click="exportData('guru')"><i
+                                class="fa fa-file-excel me-1"></i>Export</button>
+                        <button class="btn btn-outline-primary me-2"
+                            @click="document.getElementById('importFileGuru').click()"><i
+                                class="fa fa-file-import me-1"></i>Import</button>
+                        <input id="importFileGuru" type="file" accept=".xls,.xlsx" class="d-none"
+                            @change="handleImportGuru($event)">
+                        <button class="btn btn-primary" @click="openAddGuruModal()"><i
+                                class="fa fa-plus me-1"></i>Tambah Guru</button>
+                    </div>
+                </div>
+
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Foto</th>
+                                    <th>NIP</th>
+                                    <th>Nama</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Status</th>
+                                    <th>Telepon</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableGuruBody">
+                                <template x-for="(guru, index) in guruData" :key="index">
+                                    <tr>
+                                        <td x-text="index + 1"></td>
+                                        <td>
+                                            <img :src="'https://ui-avatars.com/api/?name=' + guru.nama" :alt="guru.nama"
+                                                class="rounded-circle" style="width: 32px; height: 32px;">
+                                        </td>
+                                        <td x-text="guru.nip"></td>
+                                        <td x-text="guru.nama"></td>
+                                        <td x-text="guru.mapel"></td>
+                                        <td>
+                                            <span class="badge"
+                                                :class="guru.status === 'PNS' ? 'bg-success' : 'bg-warning text-dark'"
+                                                x-text="guru.status"></span>
+                                        </td>
+                                        <td x-text="guru.telepon"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"
+                                                @click="editGuru(index)">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" @click="deleteGuru(index)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template x-if="guruData.length === 0">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-3">
+                                            <i class="fa fa-inbox me-2"></i>Tidak ada data guru
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Kelas Section -->
+            <section id="section-data-kelas" class="mt-4" x-show="activeSection === 'data-kelas'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Data Kelas (<span x-text="kelasData.length">0</span> kelas)</h4>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" @click="exportData('kelas')"><i
+                                class="fa fa-file-excel me-1"></i>Export</button>
+                        <button class="btn btn-outline-primary me-2"
+                            @click="document.getElementById('importFileKelas').click()"><i
+                                class="fa fa-file-import me-1"></i>Import</button>
+                        <input id="importFileKelas" type="file" accept=".xls,.xlsx" class="d-none"
+                            @change="handleImportKelas($event)">
+                        <button class="btn btn-primary" @click="openAddKelasModal()"><i
+                                class="fa fa-plus me-1"></i>Tambah Kelas</button>
+                    </div>
+                </div>
+
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Kode Kelas</th>
+                                    <th>Nama Kelas</th>
+                                    <th>Wali Kelas</th>
+                                    <th>Jml Siswa</th>
+                                    <th>Ruang</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableKelasBody">
+                                <template x-for="(kelas, index) in kelasData" :key="index">
+                                    <tr>
+                                        <td x-text="index + 1"></td>
+                                        <td><span class="badge bg-light text-dark" x-text="kelas.kode"></span></td>
+                                        <td x-text="kelas.nama"></td>
+                                        <td x-text="kelas.wali"></td>
+                                        <td><span class="badge bg-info" x-text="kelas.jmlSiswa"></span></td>
+                                        <td x-text="kelas.ruang"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"
+                                                @click="editKelas(index)">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" @click="deleteKelas(index)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template x-if="kelasData.length === 0">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted py-3">
+                                            <i class="fa fa-inbox me-2"></i>Tidak ada data kelas
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Mata Pelajaran Section -->
+            <section id="section-mapel" class="mt-4" x-show="activeSection === 'mapel'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Data Mata Pelajaran (<span x-text="mapelData.length">0</span> mapel)</h4>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" @click="exportData('mapel')"><i
+                                class="fa fa-file-excel me-1"></i>Export</button>
+                        <button class="btn btn-outline-primary me-2"
+                            @click="document.getElementById('importFileMapel').click()"><i
+                                class="fa fa-file-import me-1"></i>Import</button>
+                        <input id="importFileMapel" type="file" accept=".xls,.xlsx" class="d-none"
+                            @change="handleImportMapel($event)">
+                        <button class="btn btn-primary" @click="openAddMapelModal()"><i
+                                class="fa fa-plus me-1"></i>Tambah Mapel</button>
+                    </div>
+                </div>
+
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Kode Mapel</th>
+                                    <th>Nama Mapel</th>
+                                    <th>SKS</th>
+                                    <th>Guru Pengajar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableMapelBody">
+                                <template x-for="(mapel, index) in mapelData" :key="index">
+                                    <tr>
+                                        <td x-text="index + 1"></td>
+                                        <td><span class="badge bg-light text-dark" x-text="mapel.kode"></span></td>
+                                        <td x-text="mapel.nama"></td>
+                                        <td><span class="badge bg-warning text-dark" x-text="mapel.sks"></span></td>
+                                        <td x-text="mapel.guru"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"
+                                                @click="editMapel(index)">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" @click="deleteMapel(index)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template x-if="mapelData.length === 0">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-3">
+                                            <i class="fa fa-inbox me-2"></i>Tidak ada data mata pelajaran
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Input Nilai Section (example) -->
+            <section id="section-input-nilai" class="mt-4" x-show="activeSection === 'input-nilai'">
+                <h4>Input Nilai</h4>
+                <div class="app-card p-4">
+                    <form onsubmit="event.preventDefault(); alert('Mock: Nilai disimpan (frontend)')">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Kelas</label>
+                                <select class="form-select">
+                                    <option>8A</option>
+                                    <option>8B</option>
+                                    <option>9A</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Mata Pelajaran</label>
+                                <select class="form-select">
+                                    <option>Matematika</option>
+                                    <option>Bahasa Indonesia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Semester</label>
+                                <select class="form-select">
+                                    <option>Ganjil</option>
+                                    <option>Genap</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 align-self-end">
+                                <button class="btn btn-primary w-100">Pilih Kelas & Mapel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- contoh input table nilai -->
+                <div class="app-card p-3 mt-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>NIS</th>
+                                <th>Nama</th>
+                                <th>Nilai Harian</th>
+                                <th>UTS</th>
+                                <th>UAS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10234</td>
+                                <td>Andi</td>
+                                <td><input class="form-control form-control-sm" value="78"></td>
+                                <td><input class="form-control form-control-sm" value="80"></td>
+                                <td><input class="form-control form-control-sm" value="85"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-success">Simpan & Rekap</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Raport Online example -->
+            <section id="section-raport" class="mt-4" x-show="activeSection === 'raport'">
+                <h4>Raport Online</h4>
+                <div class="app-card p-4">
+                    <p class="mb-2">Pilih siswa untuk melihat raport digital (PDF)</p>
+                    <div class="d-flex gap-2">
+                        <select class="form-select w-auto">
+                            <option>10234 - Andi</option>
+                            <option>10235 - Budi</option>
+                        </select>
+                        <button class="btn btn-primary">Lihat Raport</button>
+                        <button class="btn btn-outline-secondary">Unduh PDF</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pengumuman Section -->
+            <section id="section-pengumuman" class="mt-4" x-show="activeSection === 'pengumuman'">
+                <h4>Pengumuman Sekolah</h4>
+                <div class="app-card p-4">
+                    <form onsubmit="event.preventDefault(); alert('Mock: Pengumuman dibuat (frontend)')">
+                        <div class="mb-3">
+                            <label class="form-label">Judul</label>
+                            <input class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Isi Pengumuman</label>
+                            <textarea class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Lampiran (opsional)</label>
+                            <input type="file" class="form-control">
+                        </div>
+                        <button class="btn btn-primary">Kirim & Notifikasi</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Jadwal Pelajaran Section -->
+            <section id="section-jadwal" class="mt-4" x-show="activeSection === 'jadwal'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Jadwal Pelajaran</h4>
+                    <button class="btn btn-primary" @click="openModal('jadwal')"><i class="fa fa-plus me-1"></i>Tambah
+                        Jadwal</button>
+                </div>
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Hari</th>
+                                    <th>Jam</th>
+                                    <th>Kelas</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Guru</th>
+                                    <th>Ruang</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableJadwalBody">
+                                <!-- rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jadwal Ujian Section -->
+            <section id="section-jadwal-ujian" class="mt-4" x-show="activeSection === 'jadwal-ujian'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Jadwal Ujian</h4>
+                    <button class="btn btn-primary" @click="openModal('jadwalUjian')"><i
+                            class="fa fa-plus me-1"></i>Tambah Jadwal Ujian</button>
+                </div>
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Jenis Ujian</th>
+                                    <th>Tanggal</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Kelas</th>
+                                    <th>Waktu Mulai</th>
+                                    <th>Ruang</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableJadwalUjianBody">
+                                <!-- rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nilai Siswa Section -->
+            <section id="section-nilai" class="mt-4" x-show="activeSection === 'nilai'">
+                <h4>Nilai Siswa</h4>
+                <div class="app-card p-3">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Kelas</label>
+                            <select class="form-select" id="filterKelasNilai">
+                                <option value="">-- Pilih Kelas --</option>
+                                <option>8A</option>
+                                <option>8B</option>
+                                <option>9A</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mata Pelajaran</label>
+                            <select class="form-select" id="filterMapelNilai">
+                                <option value="">-- Pilih Mapel --</option>
+                                <option>Matematika</option>
+                                <option>IPA</option>
+                                <option>Bahasa Indonesia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Jenis Penilaian</label>
+                            <select class="form-select" id="filterJenisPenilaian">
+                                <option value="">-- Pilih Jenis --</option>
+                                <option>Harian</option>
+                                <option>UTS</option>
+                                <option>UAS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>NIS</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Nilai Harian</th>
+                                    <th>UTS</th>
+                                    <th>UAS</th>
+                                    <th>Rata-rata</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableNilaiBody">
+                                <!-- rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Absensi Section -->
+            <section id="section-absensi" class="mt-4" x-show="activeSection === 'absensi'">
+                <h4>Absensi Siswa</h4>
+                <div class="app-card p-3">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Kelas</label>
+                            <select class="form-select" id="filterKelasAbsensi">
+                                <option value="">-- Pilih Kelas --</option>
+                                <option>8A</option>
+                                <option>8B</option>
+                                <option>9A</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Bulan</label>
+                            <input type="month" class="form-control" id="filterBulanAbsensi">
+                        </div>
+                        <div class="col-md-4">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-secondary w-100" onclick="filterAbsensi()">Filter</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>NIS</th>
+                                    <th>Nama</th>
+                                    <th>Hadir</th>
+                                    <th>Sakit</th>
+                                    <th>Izin</th>
+                                    <th>Alfa</th>
+                                    <th>Persentase</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableAbsensiBody">
+                                <!-- rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Keuangan (SPP) Section -->
+            <section id="section-keuangan" class="mt-4" x-show="activeSection === 'keuangan'">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Keuangan (SPP)</h4>
+                    <button class="btn btn-primary" @click="openModal('keuangan')"><i class="fa fa-plus me-1"></i>Catat
+                        Pembayaran</button>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <div class="app-card p-3 text-center">
+                            <h6>Total SPP Bulan Ini</h6>
+                            <h3 class="text-primary" id="countSPPBulanIni">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="app-card p-3 text-center">
+                            <h6>SPP Lunas</h6>
+                            <h3 class="text-success" id="countSPPLunas">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="app-card p-3 text-center">
+                            <h6>SPP Menunggak</h6>
+                            <h3 class="text-danger" id="countSPPTunggak">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="app-card p-3 text-center">
+                            <h6>Pengeluaran</h6>
+                            <h3 class="text-warning" id="countPengeluaran">Rp 0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-card p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tanggal</th>
+                                    <th>NIS</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Jenis</th>
+                                    <th>Jumlah</th>
+                                    <th>Keterangan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableKeuanganBody">
+                                <!-- rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Laporan Section -->
+            <section id="section-laporan" class="mt-4" x-show="activeSection === 'laporan'">
+                <h4>Laporan</h4>
+                <div class="app-card p-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="app-card p-4 text-center">
+                                <i class="fa fa-file-pdf text-danger" style="font-size: 2.5rem;"></i>
+                                <h5 class="mt-3">Laporan Akademik</h5>
+                                <p class="text-muted small">Hasil pembelajaran siswa per semester</p>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    onclick="generateLaporanAkademik()">Generate</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="app-card p-4 text-center">
+                                <i class="fa fa-file-pdf text-danger" style="font-size: 2.5rem;"></i>
+                                <h5 class="mt-3">Laporan Kehadiran</h5>
+                                <p class="text-muted small">Ringkasan presensi siswa per bulan</p>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    onclick="generateLaporanKehadiran()">Generate</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="app-card p-4 text-center">
+                                <i class="fa fa-file-pdf text-danger" style="font-size: 2.5rem;"></i>
+                                <h5 class="mt-3">Laporan Keuangan</h5>
+                                <p class="text-muted small">Pemasukan & pengeluaran SPP</p>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    onclick="generateLaporanKeuangan()">Generate</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="app-card p-4 text-center">
+                                <i class="fa fa-file-pdf text-danger" style="font-size: 2.5rem;"></i>
+                                <h5 class="mt-3">Laporan Guru & Kelas</h5>
+                                <p class="text-muted small">Data master sekolah</p>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    onclick="generateLaporanMaster()">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pengaturan Sistem Section -->
+            <section id="section-pengaturan" class="mt-4" x-show="activeSection === 'pengaturan'">
+                <h4>Pengaturan Sistem</h4>
+                <div class="app-card p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h5>Informasi Sekolah</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Nama Sekolah</label>
+                                <input class="form-control" value="SMP YPPGI Bomou" id="settingNamaSekolah">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kepala Sekolah</label>
+                                <input class="form-control" value="Dr. H. Bambang Suryanto, M.Pd"
+                                    id="settingKepalaSekolah">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Alamat</label>
+                                <input class="form-control" value="Jl. Pendidikan No. 1, Kab. Deiyai"
+                                    id="settingAlamat">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Telepon</label>
+                                <input class="form-control" value="+62274-123456" id="settingTelepon">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Konfigurasi</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Tahun Ajaran</label>
+                                <input class="form-control" value="2024/2025" id="settingTahunAjaran">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Semester</label>
+                                <select class="form-select" id="settingSemester">
+                                    <option>1 (Ganjil)</option>
+                                    <option selected>2 (Genap)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nominal SPP/Bulan</label>
+                                <input class="form-control" type="number" value="150000" id="settingSPPNominal">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Admin</label>
+                                <input class="form-control" type="email" value="admin@smpyppgibomou.sch.id"
+                                    id="settingEmailAdmin">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button class="btn btn-success" onclick="saveSettings()">Simpan Pengaturan</button>
+                        <button class="btn btn-outline-secondary" onclick="resetSettings()">Reset</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal: Add Siswa -->
+            <!-- ========== MODAL DIALOGS (Alpine.js x-show) ========== -->
+
+            <!-- Modal: Add Siswa (Alpine.js Driven) -->
+            <div class="modal" id="modalAddSiswa" x-show="showModal === 'siswa'"
+                :style="showModal === 'siswa' ? { display: 'flex', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 } : { display: 'none' }"
+                @click="$event.target === $el && closeModal()">
+                <div class="modal-dialog modal-lg" style="margin: auto;">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title" x-text="editingIndex !== null ? 'Edit Siswa' : 'Tambah Siswa'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addSiswa()">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">NIS</label>
+                                        <input x-model="formSiswa.nis" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-label">Nama Lengkap</label>
+                                        <input x-model="formSiswa.nama" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Kelas</label>
+                                        <select x-model="formSiswa.kelas" class="form-select" required>
+                                            <option value="">-- Pilih Kelas --</option>
+                                            <template x-for="kelas in ['8A', '8B', '9A', '9B']" :key="kelas">
+                                                <option :value="kelas" x-text="kelas"></option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Agama</label>
+                                        <select x-model="formSiswa.agama" class="form-select" required>
+                                            <option value="">-- Pilih Agama --</option>
+                                            <template
+                                                x-for="agama in ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']"
+                                                :key="agama">
+                                                <option :value="agama" x-text="agama"></option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Status Pembayaran</label>
+                                        <select x-model="formSiswa.status" class="form-select" required>
+                                            <option value="">-- Pilih Status --</option>
+                                            <option value="Lunas">Lunas</option>
+                                            <option value="Tunggakan">Tunggakan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Upload Foto</label>
+                                        <input x-model="formSiswa.foto" type="file" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Add Guru (Alpine.js Driven) -->
+            <div class="modal" id="modalAddGuru" x-show="showModal === 'guru'"
+                :style="showModal === 'guru' ? { display: 'flex', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 } : { display: 'none' }"
+                @click="$event.target === $el && closeModal()">
+                <div class="modal-dialog modal-lg" style="margin: auto;">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title" x-text="editingIndex !== null ? 'Edit Guru' : 'Tambah Guru'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addGuru()">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">NIP</label>
+                                        <input x-model="formGuru.nip" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Lengkap</label>
+                                        <input x-model="formGuru.nama" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mata Pelajaran</label>
+                                        <select x-model="formGuru.mapel" class="form-select" required>
+                                            <option value="">-- Pilih Mapel --</option>
+                                            <template
+                                                x-for="mapel in ['Matematika', 'IPA', 'Bahasa Indonesia', 'Bahasa Inggris', 'PKN', 'IPS', 'Penjas']"
+                                                :key="mapel">
+                                                <option :value="mapel" x-text="mapel"></option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Status</label>
+                                        <select x-model="formGuru.status" class="form-select" required>
+                                            <option value="">-- Pilih Status --</option>
+                                            <template x-for="status in ['PNS', 'Honorer', 'Kontrak']" :key="status">
+                                                <option :value="status" x-text="status"></option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Telepon</label>
+                                        <input x-model="formGuru.telepon" class="form-control" type="tel" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input x-model="formGuru.email" class="form-control" type="email" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Upload Foto</label>
+                                        <input type="file" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Add Kelas (Alpine.js Driven) -->
+            <div class="modal" id="modalAddKelas" x-show="showModal === 'kelas'"
+                :style="showModal === 'kelas' ? { display: 'flex', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 } : { display: 'none' }"
+                @click="$event.target === $el && closeModal()">
+                <div class="modal-dialog" style="margin: auto;">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title" x-text="editingIndex !== null ? 'Edit Kelas' : 'Tambah Kelas'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addKelas()">
+                                <div class="mb-3">
+                                    <label class="form-label">Kode Kelas</label>
+                                    <input x-model="formKelas.kode" class="form-control" placeholder="Contoh: 8A"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Kelas</label>
+                                    <input x-model="formKelas.nama" class="form-control" placeholder="Contoh: VIII A"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Wali Kelas</label>
+                                    <select x-model="formKelas.wali" class="form-select" required>
+                                        <option value="">-- Pilih Guru --</option>
+                                        <template x-for="guru in guruData" :key="guru.nip">
+                                            <option :value="guru.nama" x-text="guru.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ruang Kelas</label>
+                                    <input x-model="formKelas.ruang" class="form-control" placeholder="Contoh: 101"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah Siswa</label>
+                                    <input x-model.number="formKelas.jmlSiswa" class="form-control" type="number"
+                                        min="0" required>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Add Mapel (Alpine.js Driven) -->
+            <div class="modal" id="modalAddMapel" x-show="showModal === 'mapel'"
+                :style="showModal === 'mapel' ? { display: 'flex', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 } : { display: 'none' }"
+                @click="$event.target === $el && closeModal()">
+                <div class="modal-dialog" style="margin: auto;">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title" x-text="editingIndex !== null ? 'Edit Mapel' : 'Tambah Mapel'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addMapel()">
+                                <div class="mb-3">
+                                    <label class="form-label">Kode Mapel</label>
+                                    <input x-model="formMapel.kode" class="form-control" placeholder="Contoh: MTK001"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Mapel</label>
+                                    <input x-model="formMapel.nama" class="form-control"
+                                        placeholder="Contoh: Matematika" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">SKS (Satuan Kredit Semester)</label>
+                                    <input x-model.number="formMapel.sks" class="form-control" type="number" min="1"
+                                        max="6" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Guru Pengajar</label>
+                                    <select x-model="formMapel.guru" class="form-select" required>
+                                        <option value="">-- Pilih Guru --</option>
+                                        <template x-for="guru in guruData" :key="guru.nip">
+                                            <option :value="guru.nama" x-text="guru.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Add Jadwal Pelajaran (Alpine.js Driven) -->
+            <div class="modal" id="modalAddJadwal" style="display: none; background: rgba(0, 0, 0, 0.5);"
+                x-show="showModal === 'jadwal'" @click.away="closeModal()">
+                <div class="modal-dialog">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title"
+                                x-text="editingIndex !== null ? 'Edit Jadwal' : 'Tambah Jadwal Pelajaran'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addJadwal()">
+                                <div class="mb-3">
+                                    <label class="form-label">Hari</label>
+                                    <select x-model="formJadwal.hari" class="form-select" required>
+                                        <option value="">-- Pilih Hari --</option>
+                                        <template x-for="hari in ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']"
+                                            :key="hari">
+                                            <option :value="hari" x-text="hari"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jam Mulai</label>
+                                    <input x-model="formJadwal.jam_mulai" type="time" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jam Selesai</label>
+                                    <input x-model="formJadwal.jam_selesai" type="time" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>
+                                    <select x-model="formJadwal.kelas" class="form-select" required>
+                                        <option value="">-- Pilih Kelas --</option>
+                                        <template x-for="kelas in kelasData" :key="kelas.kode">
+                                            <option :value="kelas.kode" x-text="kelas.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mata Pelajaran</label>
+                                    <select x-model="formJadwal.mapel" class="form-select" required>
+                                        <option value="">-- Pilih Mapel --</option>
+                                        <template x-for="mapel in mapelData" :key="mapel.kode">
+                                            <option :value="mapel.nama" x-text="mapel.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Guru</label>
+                                    <select x-model="formJadwal.guru" class="form-select" required>
+                                        <option value="">-- Pilih Guru --</option>
+                                        <template x-for="guru in guruData" :key="guru.nip">
+                                            <option :value="guru.nama" x-text="guru.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ruang</label>
+                                    <input x-model="formJadwal.ruang" class="form-control" placeholder="Contoh: 101"
+                                        required>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Add Jadwal Ujian (Alpine.js Driven) -->
+            <div class="modal" id="modalAddJadwalUjian" style="display: none; background: rgba(0, 0, 0, 0.5);"
+                x-show="showModal === 'jadwalUjian'" @click.away="closeModal()">
+                <div class="modal-dialog">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title"
+                                x-text="editingIndex !== null ? 'Edit Jadwal Ujian' : 'Tambah Jadwal Ujian'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addJadwalUjian()">
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Ujian</label>
+                                    <select x-model="formJadwalUjian.jenis_ujian" class="form-select" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <template
+                                            x-for="jenis in ['UTS', 'UAS', 'Ujian Tengah Semester', 'Ujian Akhir Semester']"
+                                            :key="jenis">
+                                            <option :value="jenis" x-text="jenis"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tanggal</label>
+                                    <input x-model="formJadwalUjian.tanggal" type="date" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mata Pelajaran</label>
+                                    <select x-model="formJadwalUjian.mapel" class="form-select" required>
+                                        <option value="">-- Pilih Mapel --</option>
+                                        <template x-for="mapel in mapelData" :key="mapel.kode">
+                                            <option :value="mapel.nama" x-text="mapel.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>
+                                    <select x-model="formJadwalUjian.kelas" class="form-select" required>
+                                        <option value="">-- Pilih Kelas --</option>
+                                        <template x-for="kelas in kelasData" :key="kelas.kode">
+                                            <option :value="kelas.kode" x-text="kelas.nama"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Waktu Mulai</label>
+                                    <input x-model="formJadwalUjian.waktu_mulai" type="time" class="form-control"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ruang</label>
+                                    <input x-model="formJadwalUjian.ruang" class="form-control"
+                                        placeholder="Contoh: 101" required>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Catat Pembayaran (Alpine.js Driven) -->
+            <div class="modal" id="modalTambahPembayaran" style="display: none; background: rgba(0, 0, 0, 0.5);"
+                x-show="showModal === 'keuangan'" @click.away="closeModal()">
+                <div class="modal-dialog">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title"
+                                x-text="editingIndex !== null ? 'Edit Pembayaran' : 'Catat Pembayaran'"></h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="addKeuangan()">
+                                <div class="mb-3">
+                                    <label class="form-label">Tanggal</label>
+                                    <input x-model="formKeuangan.tanggal" type="date" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Siswa</label>
+                                    <select x-model="formKeuangan.nis" class="form-select" required>
+                                        <option value="">-- Pilih Siswa --</option>
+                                        <template x-for="siswa in siswaData" :key="siswa.nis">
+                                            <option :value="siswa.nis" x-text="`${siswa.nis} - ${siswa.nama}`"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Pembayaran</label>
+                                    <select x-model="formKeuangan.jenis" class="form-select" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <template
+                                            x-for="jenis in ['SPP', 'Uang Gedung', 'Seragam', 'Buku', 'Pengeluaran Operasional']"
+                                            :key="jenis">
+                                            <option :value="jenis" x-text="jenis"></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah</label>
+                                    <input x-model.number="formKeuangan.jumlah" type="number" class="form-control"
+                                        min="0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Keterangan</label>
+                                    <textarea x-model="formKeuangan.keterangan" class="form-control"
+                                        rows="2"></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        @click="closeModal()">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Import Excel (Alpine.js Driven) -->
+            <div class="modal" id="modalImportExcel" style="display: none; background: rgba(0, 0, 0, 0.5);"
+                x-show="showModal === 'importExcel'" @click.away="closeModal()">
+                <div class="modal-dialog">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fa fa-file-excel text-success me-2"></i>Import Data Excel
+                            </h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Pilih Tipe Data</label>
+                                <select x-model="importType" class="form-select">
+                                    <option value="siswa">Data Siswa</option>
+                                    <option value="guru">Data Guru</option>
+                                    <option value="kelas">Data Kelas</option>
+                                    <option value="mapel">Data Mata Pelajaran</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload File Excel</label>
+                                <input type="file" accept=".xls,.xlsx" class="form-control" id="excelFile"
+                                    @change="handleExcelFileSelect">
+                            </div>
+                            <div class="mb-3 p-3 bg-light rounded" x-show="previewData.length > 0">
+                                <h6>Preview Data (<span x-text="previewData.length"></span> baris)</h6>
+                                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-sm table-bordered mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <template x-for="(key, index) in Object.keys(previewData[0] || {})"
+                                                    :key="index">
+                                                    <th x-text="key" style="font-size: 0.85rem;"></th>
+                                                </template>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="(row, idx) in previewData.slice(0, 5)" :key="idx">
+                                                <tr>
+                                                    <template x-for="(key, i) in Object.keys(row)" :key="i">
+                                                        <td x-text="row[key]" style="font-size: 0.85rem;"></td>
+                                                    </template>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="alert alert-info" x-show="previewData.length === 0">
+                                <i class="fa fa-info-circle me-2"></i>
+                                Pilih file Excel untuk melihat preview data
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    @click="closeModal()">Batal</button>
+                                <button type="button" class="btn btn-primary" @click="importExcelData()"
+                                    :disabled="previewData.length === 0">
+                                    <i class="fa fa-upload me-1"></i>Import Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Cetak Kartu (Alpine.js Driven) -->
+            <div class="modal" id="modalCetakKartu" style="display: none; background: rgba(0, 0, 0, 0.5);"
+                x-show="showModal === 'cetakKartu'" @click.away="closeModal()">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" @click.stop>
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fa fa-print me-2"></i>Cetak Kartu Siswa</h5>
+                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Pilih Siswa</label>
+                                <select x-model="selectedSiswaForCard" class="form-select">
+                                    <option value="">-- Pilih Siswa --</option>
+                                    <template x-for="siswa in siswaData" :key="siswa.nis">
+                                        <option :value="siswa.nis" x-text="`${siswa.nis} - ${siswa.nama}`"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <!-- Preview Kartu -->
+                            <div class="mb-3" x-show="selectedSiswaForCard">
+                                <h6>Preview Kartu Pelajar</h6>
+                                <template x-if="getSiswaById(selectedSiswaForCard)">
+                                    <div
+                                        style="border: 2px solid #333; padding: 20px; border-radius: 8px; max-width: 400px; background: #f8f9fa;">
+                                        <div style="text-align: center; margin-bottom: 15px;">
+                                            <img :src="'https://ui-avatars.com/api/?name=' + getSiswaById(selectedSiswaForCard).nama + '&size=100&background=6366f1&color=fff&bold=true"
+                                                style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #6366f1;">
+                                        </div>
+                                        <div
+                                            style="text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
+                                            <h5 style="margin: 0; font-weight: bold;" x-text="'KARTU PELAJAR'"></h5>
+                                            <small style="color: #666;" x-text="'SMP YPPGI Bomou'"></small>
+                                        </div>
+                                        <div style="font-size: 0.9rem;">
+                                            <div
+                                                style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span style="font-weight: 600;">NIS:</span>
+                                                <span x-text="getSiswaById(selectedSiswaForCard).nis"></span>
+                                            </div>
+                                            <div
+                                                style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span style="font-weight: 600;">Nama:</span>
+                                                <span x-text="getSiswaById(selectedSiswaForCard).nama"></span>
+                                            </div>
+                                            <div
+                                                style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span style="font-weight: 600;">Kelas:</span>
+                                                <span x-text="getSiswaById(selectedSiswaForCard).kelas"></span>
+                                            </div>
+                                            <div
+                                                style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span style="font-weight: 600;">Agama:</span>
+                                                <span x-text="getSiswaById(selectedSiswaForCard).agama"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    @click="closeModal()">Batal</button>
+                                <button type="button" class="btn btn-primary" @click="printCard()"
+                                    :disabled="!selectedSiswaForCard">
+                                    <i class="fa fa-print me-1"></i>Cetak Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    </main>
+    </div>
+
+    <!-- Bootstrap JS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script src="assets/js/admin-init.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "belajar-2-tests",
+  "version": "1.0.0",
+  "description": "Dev dependencies for running end-to-end tests for SIAKAD siswa dashboard",
+  "scripts": {
+    "test:e2e": "node ./scripts/puppeteer_test.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^20.10.0"
+  }
+}
